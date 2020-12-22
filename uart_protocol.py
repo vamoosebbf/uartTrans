@@ -1,6 +1,6 @@
 import ustruct
 
-class uartTrans:
+class UartTrans:
     def __init__(self, uart):
         self.uart = uart
         self.orders = {}
@@ -100,7 +100,7 @@ class uartTrans:
                             if crc == crc_check:
                                 ret.append((is_cmd, s))
                             else:
-                                print("receive crc check failed")
+                                print("receive crc check failed: ", data)
                         continue
                     except:
                         continue
@@ -134,13 +134,43 @@ class uartTrans:
             except:
                 print("can't find cmd: ", cmd)
 
+    def bytes_to_nums(self, b):
+        ret = []
+        i = 0
+        while i < len(b):
+            try:
+                t = ustruct.unpack('>s', b[i:i+1]) # type
+                t = t[0].decode('utf-8')
+                fmt = '>' + t
+                try:
+                    num = ustruct.unpack(fmt, b[i+1:])
+                    ret.append(num[0])
+                    i = i + 1 + ustruct.calcsize(str(t))
+                except: 
+                    i = i + 1
+            except:
+                i = i + 1
+        return ret
+
+    # fl: uint8_t(B)，int8_t(b), uint16_t(H), int16_t(h), uint32_t(I), int32_t(i), double(d), str(s)
+    def pack_num(self, n, fl):
+        return  ustruct.pack(">s"+fl,fl,n)
+
     # read data, parse to cmd and execute
     def parse(self, udatas):
+        ret = []
         if udatas:
             for udata in udatas:
                 is_cmd  = udata[0]
-                if udata[0]:
-                    print("recv cmd:", udata[1])
+                if udata[0]: # cmd
                     self.exec_cmd(udata[1])
-                else:
-                    print("recv data:", udata[1])
+                else: # data
+                    nums = self.bytes_to_nums(udata[1])
+                    if len(nums) > 0:
+                        ret.append(nums) # is nums
+                    try:
+                        s = udata[1].decode('utf-8') # is string
+                        ret.append(s)
+                    except:
+                        pass
+        return ret
