@@ -161,12 +161,19 @@ uart_t.parse(udatas)
 1. 字符串 `aaaaaaaaaaaaaaaaaaa`
 
 > 串口接收:  DD FF 00 00 13 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 61 CE 3A AA FF
+> 
 > 分析:
+> 
 > DD FF: head
+> 
 > 00: data type
+> 
 > 00 13： data len
+> 
 > 61 ... 61: data
+> 
 > CE 3A: crc16
+> 
 > AA FF: end
 > 
 > read 后数据:
@@ -184,17 +191,29 @@ uart_t.parse(udatas)
 2. 数字 `3.1415, 16, -8` 
 
 > 串口接收到:  DD FF 00 00 0A 66 40 49 0E 56 48 00 10 62 F8 4C E0 AA FF 
+> 
 > 分析:
+> 
 > DD FF: head
+> 
 > 00: data type
+> 
 > 0A: data len
+> 
 > 66: 'f' float
+> 
 > 40 49 0e 56: 3.1415
+> 
 > 48: 'H' uint16_t
+> 
 > 00 10: 16
+> 
 > 62: 'b' int8_t
+> 
 > F8: -8
+> 
 > 4C E0: crc16
+> 
 > AA FF: end
 > 
 > read 后数据:
@@ -212,17 +231,29 @@ uart_t.parse(udatas)
 3. 指令 `cus`
 
 > 串口接收到: DD FF 01 00 03 63 75 73 E6 AB AA FF
+> 
 > 分析:
+> 
 > DD FF: head
+> 
 > 00: data type
+> 
 > 0A: data len
+> 
 > 66: 'f' float
+> 
 > 40 49 0e 56: 3.1415
+> 
 > 48: 'H' uint16_t
+> 
 > 00 10: 16
+> 
 > 62: 'b' int8_t
+> 
 > F8: -8
+> 
 > 4C E0: crc16
+> 
 > AA DD: end
 > 
 > read 后数据:
