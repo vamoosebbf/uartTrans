@@ -73,7 +73,7 @@ d = uart_t.parse(udatas)
 
 ## API: UartTrans
 
-* 注册指令
+### 注册指令
 
 注册新指令并设置回调, 若指令已存在, 则会覆盖.
 
@@ -81,31 +81,46 @@ d = uart_t.parse(udatas)
 reg_cmd(cmd, fun, *args):
 ```
 
-参数: `cmd` 指令名, 字符串类型, `fun` 指令回调函数, `*args` 回调函数参数.
+#### 参数
 
-返回值: 无
+* `cmd` 指令名, 字符串类型 
+* `fun` 指令回调函数
+* `*args` 回调函数参数
 
-* 注销指令
+#### 返回值
+
+无
+
+
+### 注销指令
 
 ```python
 unreg_cmd(cmd):
 ```
 
-参数: `cmd` 指令名, 字符串类型.
+#### 参数
 
-返回值: 无
+`cmd` 指令名, 字符串类型.
 
-* 发送指令或数据
+#### 返回值
+
+无
+
+### 发送指令或数据
 
 ```python
 write(s, is_cmd)
 ```
 
-参数: `s` 要发送的字符串, 打包好的数字, 指令(也是字符串), `is_cmd` 是否以指令的形式发送
+#### 参数
 
-返回值: 无
+`s` 要发送的字符串, 打包好的数字, 指令(也是字符串), `is_cmd` 是否以指令的形式发送
 
-* 打包数字<div id="pack_num"></div>
+#### 返回值
+
+无
+
+### 打包数字<div id="pack_num"></div>
 
 将数字打包成传输格式
 
@@ -113,18 +128,25 @@ write(s, is_cmd)
 pack_num(n, fl)
 ```
 
-参数: `n` 数字, `fl` 数字类型, uint8_t(B), int8_t(b), uint16_t(H), int16_t(h), uint32_t(I), int32_t(i), uint64_t(Q), int64_t(q), float(f), double(d), str(s)
+#### 参数
+ 
+ * `n` 数字
+ * `fl` 数字类型, uint8_t(B), int8_t(b), uint16_t(H), int16_t(h), uint32_t(I), int32_t(i), uint64_t(Q), int64_t(q), float(f), double(d), str(s)
 
-返回值: 打包后的数字
+#### 返回值
 
-例如: 将3.1415打包成float类型后发送
+打包后的数字
+
+#### 示例
+
+将3.1415打包成float类型后发送
 
 ```python
 pi = uart_t.pack_num(3.1415, 'f')
 uart_t.write(pi)
 ```
 
-* 接收指令或数据
+### 接收指令或数据
 
 读取数据、指令并解析后返回
 
@@ -132,10 +154,12 @@ uart_t.write(pi)
 read()
 ```
 
-返回值: 接收到的数据或指令列表, 格式为二维列表: `[[is_cmd, data]]` is_cmd: data 是否为指令(1), 数据(0), data: 数据或指令本身.
+#### 返回值
+
+接收到的数据或指令列表, 格式为二维列表: `[[is_cmd, data]]` is_cmd: data 是否为指令(1), 数据(0), data: 数据或指令本身.
 未接收到数据则为空列表
 
-* 解析数据
+### 解析数据
 
 将 read 得到的数据进行解析, 若为指令, 指令已注册则立即执行指令对应回调函数, 不存在将打印提醒信息, 若为数据, 将数据存储在列表中返回
 
@@ -143,11 +167,16 @@ read()
 parse(udatas)
 ```
 
-参数: `udatas` read 得到的数据
+#### 参数
+`udatas` read 得到的数据
 
-返回值: 列表, 解析后的数据列表
+#### 返回值
 
-示例: 读取数据、指令并解析
+列表, 解析后的数据列表
+
+#### 示例
+
+读取数据、指令并解析
 
 ```python
 udatas = uart_t.read()
@@ -260,4 +289,5 @@ uart_t.parse(udatas)
 > ```
 > 
 > parse 后数据:
+> 
 > 该条数据为指令类型, parse直接执行该指令回调函数
