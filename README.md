@@ -35,14 +35,14 @@ uart1 = UART(UART.UART1, 115200, 8, 1, 0, timeout=1000, read_buf_len=4096)
 uart_t = UartTrans(uart1)
 ```
 
-* 注册新的指令
+* 自定义函数并为其注册指令
 
 ```python
 def cus_cmd(uart, s):
     print("execute cus cmd {}".format(s))
     uart.write("execute cus cmd {}".format(s))
 
-uart_t.reg_cmd("cus", cus_cmd, uart1, 'hello') # 注册当接受到 'cus' 时的回调函数为 cus_cmd， 回调函数参数为 uart1 'hello'
+uart_t.reg_cmd("cus", cus_cmd, uart1, 'hello') # 注册当接收到指令 'cus' 时执行 cus_cmd， 该函数参数为 uart1，'hello'
 ```
 
 * 发送指令或字符串
@@ -52,17 +52,14 @@ uart_t.write('cus', True) # send 'cus' cmd
 uart_t.write('hello') # send 'hello'data
 ```
 
-* 发送数字
-
-将数字打包后发送, 打包数字第二个参数含义如下:
-uint8_t(B), int8_t(b), uint16_t(H), int16_t(h), uint32_t(I), int32_t(i), uint64_t(Q), int64_t(q), float(f), double(d), str(s)
+* 发送数字（`pack_num` 使用请查看[pack_num API](#pack_num)）
 
 ```python
-nums = pack_num(3.1415, 'f') + pack_num(16, 'H') + pack_num(-8, 'b')
-uart_t.write(nums)
+nums = pack_num(3.1415, 'f') + pack_num(16, 'H') + pack_num(-8, 'b') # pack num data
+uart_t.write(nums) # send num 3.1415(float) 16(uint16) -8(int8)
 ```
 
-* 接收指令或数据并解包
+* 接收指令或数据
 
 ```python
 udatas = uart_t.read()
@@ -108,7 +105,7 @@ write(s, is_cmd)
 
 返回值: 无
 
-* 打包数字
+* 打包数字<div id="pack_num"></div>
 
 将数字打包成传输格式
 
